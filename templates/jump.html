@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-cn" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% if l %}Choose IPFS Gateway {% else %}选择IPFS网关{% endif %} - i-Book.in beta</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+	<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=gb2312">
+	<meta name="description" content="i-Book.in 一个索引IPFS链接的搜索引擎。">
+	<meta name="keywords" content="i-Book.in,IPFS搜索,IFPS,pdf,azw3,mobi,epub,ebooks,搜索引擎,search">
+	<meta name="referrer" content="no-referrer">
+	<link rel="shortcut icon" type="image/png" href="/img/icon.png">
+	<script>document.getElementsByTagName("html")[0].className +=" js";</script>
+	<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Sintony:400,700' rel='stylesheet' type='text/css'>
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/modernizr.js"></script>
+	<style>.btn-leo {
+		color: #fff;
+		background-color: #BCA1C8;
+		border-color: #BCA1C8;</style>
+
+	<style type="text/css">
+		.wrapper11 {position: relative;}
+		#input {position: absolute;top: 0;left: 0;opacity: 0;z-index: -10;}
+	</style>
+	<script>
+			if (self == top) {
+				var theBody = document.getElementsByTagName('body')[0];
+				theBody.style.display ="block";
+			} else {
+				top.location = self.location;
+			}
+			</script>
+	<script>if(top.location!==self.location){top.location.href=self.location.href; }</script> 
+</head>
+<body>
+<section id="section1" class="cd-section">
+	<div class="content-wrapper">
+		<h1>👇获取按钮在下方👇</br><b>请向下滑动</b></h1>
+		<p>本页由 i-Book.in 自动生成</p>
+	</div>
+</section>
+<section id="section2" class="cd-section">
+	<div class="content-wrapper">
+		<h1>关于IPFS网络</h1>
+		<p>星际文件系统（InterPlanetary File System，缩写IPFS）是一个旨在创建持久且分布式存储和共享文件的网络传输协议。它是一种内容可寻址的对等超媒体分发协议。在IPFS网络中的节点将构成一个分布式文件系统。</br></br>本站概不储存任何文件，所有文件均为网友自主上传到IPFS网络内。由于IPFS网络的特殊性，你需要自主在此页面选择你要使用的网关。</p>
+	</div>
+</section>
+<section id="section3" class="cd-section">
+	<div class="content-wrapper">
+		<h1>请帮助我们</h1>
+		<P>本站所有的开销均由开发组独立承担。目前本站主要的支出为服务器租赁、Cloudflare的CDN、防火墙、专业版订阅以及开发组的咖啡、阔乐等。</P><br>
+		<P>如果你觉得这个搜索引擎还不错，不妨用实际行动来支持我们(12随便那个都行)。这样可以让 i-Book.in 更加长久的运营，持续稳定的增加索引数量、提供高效的索引服务。</P>
+		<p>1、我们在网站上设置了广告，请将本站加入[广告过滤插件]白名单。也可以<a href="https://paste.ubuntu.com/p/6JdHn9xSWP/" target="_blank" rel="noopener noreferrer"> 点此 </a>了解更多。</p>
+		<p>2、将本站分享给其他爱读书的朋友们。</p>
+	</div>
+</section>
+<section id="section4" class="cd-section">
+	<div class="content-wrapper">
+		</br>&nbsp</br>
+		<h1>选择IPFS网关</h1>
+		<p>所有节点全球均可访问，1和2在中国大陆被封锁。</br>如某网关无法访问，请使用其他网关。</br>注意：Telegram、QQ、Line、等IM软件的内置浏览器有概率无法点击跳转按钮，请使用系统自带浏览器。如还是无法点击，请尝试刷新网页。</p></br>
+		<div class="col-md-4 column">
+		</div>
+		<div class="col-md-4 column">
+			<a href="https://ipfs.io/ipfs/{{getlinks}}" target="_blank"><button type="button" class="btn btn-leo btn-default">1</button></a>&nbsp
+			<a href="https://cloudflare-ipfs.com/ipfs/{{getlinks}}" target="_blank"><button type="button" class="btn btn-leo btn-default">2</button></a>&nbsp
+			<a href="http://dweb.link/ipfs/{{getlinks}}" target="_blank"><button type="button" class="btn btn-leo btn-default">3</button></a>&nbsp
+			<a href="https://ipfs.lc/ipfs/{{getlinks}}" target="_blank"><button type="button" class="btn btn-leo btn-default">4</button></a></br>&nbsp
+		</div>
+		<div class="wrapper11">
+			<font size="1"><p id="text">{{getlinks}}</p></font>
+			<textarea id="input"></textarea>
+			<button  type="button" class="btn btn-leo btn-default" onclick="copyText()">复制Qmhash</button>
+		</div></br></br>&nbsp</br>
+		<div class="col-md-4 column">
+		</div>
+	</div>
+</section>
+<script src="js/jquery-2.1.4.js"></script>
+<script src="js/main.js"></script>
+
+{% endif %}
+</body>
+<script type="text/javascript">
+	function copyText() {
+        var text = document.getElementById("text").innerHTML;
+        var input = document.getElementById("input");
+        input.value = text;
+        input.select();
+        document.execCommand("copy");
+    }
+</script>
+</html>

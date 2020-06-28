@@ -1,0 +1,592 @@
+@import 'bourbon'; // http://bourbon.io/
+
+@import '../partials/variables'; // colors, fonts etc...
+
+@import '../partials/mixins'; // custom mixins
+
+@import '../partials/layout'; // responsive grid and media queries
+
+/* -------------------------------- 
+
+Primary style
+
+-------------------------------- */
+
+*, *::after, *::before {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 62.5%;
+}
+
+body {
+	font: {
+		size: 1.6rem;
+		family: $primary-font; // variables inside partials > _variables.scss
+	}
+	color: $color-2;
+	background-color: $color-1;
+	@include font-smoothing;
+}
+
+a {
+	color: $color-4;
+	text-decoration: none;
+}
+
+.cd-image-replace {
+	/* replace text with image */
+	display: inline-block;
+	overflow: hidden;
+	text-indent: 100%;
+	white-space: nowrap;
+	color: transparent;
+}
+
+/* -------------------------------- 
+
+Navigation trigger - visible on small devices only
+
+-------------------------------- */
+
+.cd-nav-trigger {
+	display: block;
+	position: fixed;
+	z-index: 2;
+	bottom: 30px;
+	right: 5%;
+	height: 44px;
+	width: 44px;
+	@include border-radius;
+	background: rgba($color-2, .9);
+
+	/* reset button style */
+	cursor: pointer;
+	@include appearance(none);
+	border: none;
+	outline: none;
+
+	span {
+		/* central dot */
+		position: absolute;
+		height: 4px;
+		width: 4px;
+		background-color: $color-1;
+		border-radius: 50%;
+		@include center;
+
+		&::before, &::after {
+			/* bottom and top dots */
+			content: '';
+			position: absolute;
+			left: 0;
+			height: 100%;
+			width: 100%;
+			background-color: $color-1;
+			border-radius: inherit;
+		}
+
+		&::before {
+			top: -9px;
+		}
+
+		&::after {
+			bottom: -9px;
+		}
+	}
+
+	@include MQ(M) {
+		display: none;
+	}
+}
+
+/* -------------------------------- 
+
+Vertical navigation
+
+-------------------------------- */
+
+.cd-vertical-nav {
+	position: fixed;
+	z-index: 1;
+	right: 5%;
+	bottom: 30px;
+	width: 90%;
+	max-width: 400px;
+	max-height: 90%;
+	overflow-y: auto;
+	@include transform(scale(0));
+	@include transform-origin(right bottom);
+	@include transition(transform .2s);
+	@include border-radius;
+	background-color: rgba($color-2, .9);
+
+	a {
+		display: block;
+		padding: 1em;
+		color: $color-1;
+		font-weight: bold;
+		border-bottom: 1px solid rgba($color-1, .1);
+
+		&.active {
+			color: $color-4;
+		}
+	}
+	
+	&.open {
+		@include transform(scale(1));
+		-webkit-overflow-scrolling: touch;
+	}
+
+	&.open + .cd-nav-trigger {
+		background-color: transparent;
+		
+		span {
+			background-color: rgba($color-1, 0);	
+		}
+
+		span::before, span::after {
+			/* transform dots in 'X' icon */
+			height: 3px;
+			width: 20px;
+			border-radius: 0;
+			left: -8px;
+		}
+
+		span::before {
+			@include transform(rotate(45deg));
+			top: 1px;
+		}
+
+		span::after {
+			@include transform(rotate(135deg));
+			bottom: 0;
+		}
+	}
+
+	@include MQ(M) {
+		/* reset style */
+		right: 0;
+		top: 0;
+		bottom: auto;
+		height: 100vh;
+		width: 90px;
+		max-width: none;
+		max-height: none;
+		@include transform(scale(1));
+		background-color: transparent;
+		/* vertically align its content*/
+		display: table;
+
+		&::before {
+			/* this is the navigation background */
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba($color-3, .8);
+			@include transform(translateX(100%));
+			@include transition(transform .4s);
+		}
+
+		.no-touch &:hover::before, 
+		.touch &::before {
+			@include transform(translateX(0));
+		}
+
+		ul {
+			/* vertically align <ul> inside <nav>*/
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+		}
+
+		a {
+			position: relative;
+			padding: 3em 0 0;
+			margin: 1.4em auto;
+			border-bottom: none;
+			font-size: 1.2rem;
+			color: $color-2;
+
+			&.active {
+				color: $color-2;
+			}
+
+			&::before, &::after {
+				/* used to create the filled circle and the background icon */
+				content: '';
+				position: absolute;
+				left: 50%;
+				/* Force Hardware Acceleration */
+				@include backface-visibility(hidden);
+				@include transform(translateZ(0));
+			}
+
+			&::before {
+				/* filled circle */
+				top: 0;
+				height: 32px;
+				width: 32px;
+				border-radius: 50%;
+				background: $color-2;
+				@include transform(translateX(-50%) scale(.25));
+				@include transition(transform .4s, background-color .2s);
+			}
+
+			&::after {
+				/* icon */
+				opacity: 0;
+				top: 8px;
+				height: 16px;
+				width: 16px;
+				background: url(../img/cd-nav-icons.svg) no-repeat;
+				@include transform(translateX(-50%) scale(0));
+				@include transition(transform .4s 0s, opacity .1s .3s);
+			}
+
+			&.active::before, 
+			.no-touch &:hover::before {
+				background-color: $color-4;
+			}
+		}
+
+		li:first-of-type a::after {
+			/* change icon using image sprites */
+			background-position: 0px -48px;
+			/* fix bug with transitions - set scale(0.01) rather than scale(0) */
+			@include transform(translateX(-50%) translateY(4.5em) scale(0.01));
+		}
+
+		li:first-of-type a::before {
+			@include transform(translateX(-50%) translateY(4.5em) scale(.25));
+		}
+
+		li:nth-of-type(2) a::after {
+			background-position: 0px -32px;
+			@include transform(translateX(-50%) translateY(1.5em) scale(0.01));
+		}
+
+		li:nth-of-type(2) a::before {
+			@include transform(translateX(-50%) translateY(1.5em) scale(.25));
+		}
+
+		li:nth-of-type(3) a::after {
+			background-position: 0px -16px;
+			@include transform(translateX(-50%) translateY(-1.5em) scale(0.01));
+		}
+
+		li:nth-of-type(3) a::before {
+			@include transform(translateX(-50%) translateY(-1.5em) scale(.25));
+		}
+
+		li:nth-of-type(4) a::after {
+			background-position: 0px 0px;
+			@include transform(translateX(-50%) translateY(-4.5em) scale(0.01));
+		}
+
+		li:nth-of-type(4) a::before {
+			@include transform(translateX(-50%) translateY(-4.5em) scale(.25));
+		}
+
+		.label {
+			display: block;
+			/* Force Hardware Acceleration */
+			@include backface-visibility(hidden);
+			@include transform(translateZ(0));
+			@include transform(translateX(100%));
+			@include transition(transform .4s);
+		}
+
+		.no-touch &:hover a::before,
+		.no-touch &:hover a::after,
+		.touch & li:nth-of-type(n) a::before,
+		.touch & li:nth-of-type(n) a::after {
+			@include transform(translateX(-50%) scale(1));
+			/* set a rotation to fix bug on Firefox - http://gielberkers.com/how-to-fix-shaking-css-transitions-in-firefox/ */
+			-moz-transform: translateX(-50%) scale(1) rotate(0.02deg);
+		}
+
+		.no-touch &:hover a::after, 
+		.touch & a::after {
+			opacity: 1;
+			@include transition(transform .4s, opacity 0s);
+		}
+
+		.no-touch &:hover .label,
+		.touch & .label {
+			@include transform(translateX(0));
+		}
+	}
+}
+
+/* -------------------------------- 
+
+Content Sections - basic style
+
+-------------------------------- */
+
+.cd-section {
+	/* vertically align its content*/
+	display: table;
+	width: 100%;
+	height: 100vh;
+	background: $color-1;
+
+	&:nth-of-type(even) {
+		background-color: lighten($color-1, 20%);
+	}
+
+	> div {
+		/* vertically align <div> inside <section> */
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+	}
+
+	h1, h2 {
+		width: 90%;
+		margin: 0 auto;
+		text-transform: uppercase;
+		font-size: 2.4rem;
+		line-height: 1.4;
+
+		b {
+			color: tint($color-1, 15%);
+		}
+	}
+
+	p {
+		margin: 1em auto 0;
+		line-height: 1.6;
+		width: 90%;
+		max-width: 680px;
+		color: rgba($color-2, .6);
+	}
+
+	@include MQ(M) {
+		
+		h1, h2 {
+			font-size: 3rem;
+		}
+
+		p {
+			font-size: 2rem;
+		}
+	}
+}
+
+.cd-scroll-down {
+	position: absolute;
+	@include center(x);
+	bottom: 20px;
+	width: 44px;
+	height: 44px;
+	background: url(../img/cd-arrow-bottom.svg) no-repeat center center;
+}
+
+/* -------------------------------- 
+
+no-js
+
+-------------------------------- */
+
+.no-js .cd-nav-trigger {
+	display: none;
+}
+
+.no-js .cd-vertical-nav {
+	position: static;
+	height: auto;
+	width: 100%;
+	max-width: none;
+	background-color: rgba($color-3, .8);
+	border-radius: 0;
+	@include transform(scale(1));
+
+	&::before {
+		display: none;
+	}
+
+	ul {
+		@include clearfix;
+	}
+
+	li {
+		display: inline-block;
+		float: left;
+	}
+
+	a {
+		padding: 0 1em;
+		margin: 1.5em 1em;
+		color: $color-2;
+
+		&.active {
+			color: $color-4;
+		}
+	}
+
+	a::after, a::before {
+		display: none;
+	}
+
+	.label {
+		@include transform(translateX(0));
+	}
+	
+}
+.btn--slide-fx {
+	position: relative;
+	overflow: hidden;
+  
+	.btn__label, .icon {
+	  position: relative;
+	  z-index: 2;
+	}
+  
+	&::before { // sliding background
+	  content: '';
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  width: 100%;
+	  height: 100%;
+	  background-color: var(--color-contrast-higher);
+	  z-index: 1;
+	  transform: scaleX(0) scaleY(1);
+	}
+  }
+  
+  .btn--slide-fx:not(.js-btn--slide-fx),
+  .btn--slide-fx.btn-slide-fx-animate {
+	&::before {
+	  transform-origin: right center;
+	  transition: transform .3s var(--ease-in-out);
+	}
+  }
+  
+  .btn--slide-fx:not(.js-btn--slide-fx):hover,
+  .btn--slide-fx.btn-slide-fx-hover {
+	&::before {
+	  transform: scaleX(1) scaleY(1);
+	  transform-origin: left center;
+	}
+  }
+  
+  .btn--slide-fx-from-right:not(.js-btn--slide-fx),
+  .btn--slide-fx-from-right.btn-slide-fx-animate {
+	&::before {
+	  transform-origin: left center;
+	}
+  }
+  
+  .btn--slide-fx-from-right:not(.js-btn--slide-fx):hover,
+  .btn--slide-fx-from-right.btn-slide-fx-hover {
+	&::before {
+	  transform-origin: right center;
+	}
+  }
+  
+  .btn--slide-fx-from-bottom,
+  .btn--slide-fx-from-top {
+	&::before {
+	  transform: scaleX(1) scaleY(0);
+	}
+  }
+  
+  .btn--slide-fx-from-bottom:not(.js-btn--slide-fx):hover,
+  .btn--slide-fx-from-top:not(.js-btn--slide-fx):hover,
+  .btn--slide-fx-from-bottom.btn-slide-fx-hover
+  .btn--slide-fx-from-top.btn-slide-fx-hover {
+	&::before {
+	  transform: scaleX(1) scaleY(1);
+	}
+  }
+  
+  .btn--slide-fx-from-bottom:not(.js-btn--slide-fx),
+  .btn--slide-fx-from-bottom.btn-slide-fx-animate {
+	&::before {
+	  transform-origin: center top;
+	}
+  }
+  
+  .btn--slide-fx-from-bottom:not(.js-btn--slide-fx):hover,
+  .btn--slide-fx-from-bottom.btn-slide-fx-hover {
+	&::before {
+	  transform-origin: center bottom;
+	}
+  }
+  
+  .btn--slide-fx-from-top:not(.js-btn--slide-fx),
+  .btn--slide-fx-from-top.btn-slide-fx-animate { 
+	&::before {
+	  transform-origin: center bottom;
+	}
+  }
+  
+  .btn--slide-fx-from-top:not(.js-btn--slide-fx):hover,
+  .btn--slide-fx-from-top.btn-slide-fx-hover {
+	&::before {
+	  transform-origin: center top;
+	}
+  }
+  
+  .btn--slide-fx-to-left, 
+  .btn--slide-fx-to-right,
+  .btn--slide-fx-to-top, 
+  .btn--slide-fx-to-bottom {
+	&::before {
+	  transform: scaleX(1) scaleY(1);
+	}
+  }
+  
+  .btn--slide-fx-to-left.btn-slide-fx-hover-out, 
+  .btn--slide-fx-to-right.btn-slide-fx-hover-out {
+	&::before {
+	  transform: scaleX(0) scaleY(1);
+	}
+  }
+  
+  .btn--slide-fx-to-top.btn-slide-fx-hover-out, 
+  .btn--slide-fx-to-bottom.btn-slide-fx-hover-out {
+	&::before {
+	  transform: scaleX(1) scaleY(0);
+	}
+  }
+  
+  .btn--slide-fx-to-left.btn-slide-fx-animate::before {
+	transform-origin: left center;
+  }
+  
+  .btn--slide-fx-to-right.btn-slide-fx-animate::before {
+	transform-origin: right center;
+  }
+  
+  .btn--slide-fx-to-top.btn-slide-fx-animate::before {
+	transform-origin: center top;
+  }
+  
+  .btn--slide-fx-to-bottom.btn-slide-fx-animate::before {
+	transform-origin: center bottom;
+  }
+  
+  
+  .btn--slide-fx-replace-label { // replace label with icon
+	.icon {
+	  position: absolute;
+	  top: 50%;
+	  left: 50%;
+	  opacity: 0;
+	  transform: translate(-50%, -50%) scale(0);
+	  transition: transform .3s .1s, opacity .3s var(--ease-out);
+	}
+  
+	&:hover .icon {
+	  opacity: 1;
+	  transform: translate(-50%, -50%) scale(1);
+	}
+  }
