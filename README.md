@@ -90,7 +90,7 @@ wget https://ibookin-1252237247.cos.ap-shanghai.myqcloud.com/i-book.in.tar.gz &&
 
 `python3 web.py`
 
-这时候打开你你的服务器IP+7743即可打开搜索引擎，应该如下图：
+这时候打开你的服务器IP+端口7743即可打开搜索引擎，例:127.0.0.1:7743，如下图：
 
 ![image.png](https://i.loli.net/2020/06/27/WgCpfYdKIl45eF6.png)
 
